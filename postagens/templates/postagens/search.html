@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Busca de Projetos por Nome</h2>
+<form action="{% url 'postagens:search' %}">
+    <p>
+        <label for="id_query">Título:</label>
+        <input type="text" name="query" id="id_query" />
+    </p>
+    <button type="submit">Buscar</button>
+</form>
+
+
+<h2>Resultado da Busca</h2>
+{% if postagem_list %}
+<section class="lista-de-cards">
+    {% for postagem in postagem_list %}
+    <article class="card">
+        <img src="{{ postagem.poster_url }}" alt="Poster do projeto {{ postagem.name}}">
+        <p>{{ postagem.name }} ({{ postagem.release_year }})</p>
+    </article>
+    {% endfor %}
+</section>
+{% else %}
+<p>Não foi encontrado nenhum projeto para a busca.</p>
+{% endif %}
+
+{% endblock content %}

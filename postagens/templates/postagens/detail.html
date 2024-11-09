@@ -1,0 +1,13 @@
+{% extends 'base.html' %} {% block title %} {{ postagem.name }} ({{
+    postagem.release_year }}) {% endblock title %} {% block content %}
+    <h2>Detalhes do Projeto {{ postagem.name }} ({{ postagem.release_year }})</h2>
+    
+    <section class="dados-de-projeto">
+      <img src="{{ postagem.poster_url }}" alt="Poster do projeto {{ postagem.name}}" />
+      <ul>
+        <li>Nome: {{ postagem.name }}</li>
+        <li>Ano de Lançamento: {{ postagem.release_year }}</li>
+      </ul>
+    </section>
+    
+    {% endblock content %}

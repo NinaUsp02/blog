@@ -1,0 +1,13 @@
+{% extends 'base.html' %} {% block content %}
+<h2>Todos os Projetos</h2>
+<section>
+  <p>
+    Muitos resultados? <a href="{% url 'postagens:search' %}">Buscar Projetos</a>
+  </p>
+  <p>
+    Não encontrou o filme?
+    <a href="{% url 'postagens:create' %}">Adicionar Novo Projeto</a>
+  </p>
+</section>
+{% if postagem_list %}
+<section class="lista-de-cards">...</section>
