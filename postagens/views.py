@@ -2,8 +2,8 @@ from django.http import HttpResponse
 from .temp_data import postagem_data
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
-from django.urls import reverse
-from .models import Postagem, Review
+from django.urls import reverse, reverse_lazy
+from .models import Postagem, Review, List
 from django.views import generic
 from .forms import PostagemForm, ReviewForm
 
@@ -96,3 +96,15 @@ def create_review(request, postagem_id):
         form = ReviewForm()
     context = {'form': form, 'postagem': postagem}
     return render(request, 'postagens/review.html', context)
+
+
+class ListListView(generic.ListView):
+    model = List
+    template_name = 'postagens/lists.html'
+
+
+class ListCreateView(generic.CreateView):
+    model = List
+    template_name = 'postagens/create_list.html'
+    fields = ['name', 'author', 'postagens']
+    success_url = reverse_lazy('postagens:lists')
