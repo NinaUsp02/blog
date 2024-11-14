@@ -23,14 +23,4 @@ class Migration(migrations.Migration):
                 ('poster_url', models.URLField(null=True)),
             ],
         ),
-        migrations.CreateModel(
-            name='Review',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('text', models.CharField(max_length=255)),
-                ('likes', models.IntegerField(default=0)),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-                ('postagem', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='postagens.postagem')),
-            ],
-        ),
     ]

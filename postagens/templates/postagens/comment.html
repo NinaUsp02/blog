@@ -3,7 +3,7 @@
 {% block content %}
 <h2>Comentar Projeto - {{ postagem.name }} ({{ postagem.release_year }})</h2>
 
-<form action="{% url 'postagens:review' postagem.id %}" method="post">
+<form action="{% url 'postagens:comment' postagem.id %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Postar Comentário</button>

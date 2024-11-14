@@ -10,7 +10,8 @@ urlpatterns = [
     path('<int:pk>/', views.PostagemDetailView.as_view(), name='detail'),
     path('<int:pk>/update/', views.PostagemUpdateView.as_view(), name='update'),
     path('<int:pk>/delete/', views.PostagemDeleteView.as_view(), name='delete'),
-    path('<int:postagem_id>/review/', views.create_review, name='review'),
     path('lists/', views.ListListView.as_view(), name='lists'),
     path('lists/create', views.ListCreateView.as_view(), name='create-list'),
+    path('<int:postagem_id>/comment/', views.create_comment, name='comment'),
  ]
+

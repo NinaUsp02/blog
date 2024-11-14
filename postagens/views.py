@@ -5,9 +5,10 @@ from .temp_data import postagem_data
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
-from .models import Postagem, Review, List
+from .models import Postagem, List, Comment
 from django.views import generic
-from .forms import PostagemForm, ReviewForm
+from .forms import PostagemForm, CommentForm
+from django.contrib.auth.decorators import login_required
 
 
 class PostagemListView(generic.ListView):
@@ -46,23 +47,24 @@ class PostagemDeleteView(generic.DeleteView):
     template_name = 'postagens/delete.html'
     success_url = reverse_lazy('postagens:index')
 
-def create_review(request, postagem_id):
+@login_required
+def create_comment(request, postagem_id):
     postagem = get_object_or_404(Postagem, pk=postagem_id)
     if request.method == 'POST':
-        form = ReviewForm(request.POST)
+        form = CommentForm(request.POST)
         if form.is_valid():
-            review_author = form.cleaned_data['author']
-            review_text = form.cleaned_data['text']
-            review = Review(author=review_author,
-                            text=review_text,
+            comment_author = request.user
+            comment_text = form.cleaned_data['text']
+            comment = Comment(author=comment_author,
+                            text=comment_text,
                             postagem=postagem)
-            review.save()
+            comment.save()
             return HttpResponseRedirect(
                 reverse('postagens:detail', args=(postagem_id, )))
     else:
-        form = ReviewForm()
+        form = CommentForm()
     context = {'form': form, 'postagem': postagem}
-    return render(request, 'postagens/review.html', context)
+    return render(request, 'postagens/comment.html', context)
 
 
 class ListListView(generic.ListView):

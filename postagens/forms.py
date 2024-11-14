@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Postagem, Review
+from .models import Postagem, Comment
 
 
 class PostagemForm(ModelForm):
@@ -16,9 +16,9 @@ class PostagemForm(ModelForm):
             'poster_url': 'URL do Poster',
         }
 
-class ReviewForm(ModelForm):
+class CommentForm(ModelForm):
     class Meta:
-        model = Review
+        model = Comment
         fields = [
             'author',
             'text',
