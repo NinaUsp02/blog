@@ -9,6 +9,7 @@ from .models import Postagem, List, Comment
 from django.views import generic
 from .forms import PostagemForm, CommentForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class PostagemListView(generic.ListView):
@@ -30,19 +31,20 @@ def search_postagens(request):
         context = {"postagem_list": postagem_list}
     return render(request, "postagens/search.html", context)
 
-class PostagemCreateView(generic.CreateView):
+
+class PostagemCreateView(LoginRequiredMixin, generic.CreateView):
     model = Postagem
     form_class = PostagemForm
     template_name = 'postagens/create.html'
     success_url = reverse_lazy('postagens:index')
 
-class PostagemUpdateView(generic.UpdateView):
+class PostagemUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Postagem
     form_class = PostagemForm
     template_name = 'postagens/update.html'
     success_url = reverse_lazy('postagens:index')
 
-class PostagemDeleteView(generic.DeleteView):
+class PostagemDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Postagem
     template_name = 'postagens/delete.html'
     success_url = reverse_lazy('postagens:index')
