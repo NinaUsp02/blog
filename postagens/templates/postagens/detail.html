@@ -7,8 +7,12 @@
       <ul>
         <li>Nome: {{ postagem.name }}</li>
         <li>Ano de Atuação: {{ postagem.release_year }}</li>
-        {% if postagem.list_set.all %}
-          <li>Incluso nas listas: {{ postagem.list_set.all|join:", " }} </li>
+        {% if postagem.list_set.exists %}
+          <li>Incluso nas listas: 
+            {% for item in postagem.list_set.all %}
+              {{item.name}}{% if not forloop.last %}, {% endif %}
+            {% endfor %} 
+          </li>
         {% endif %}
         <li>
           <a href="{% url 'postagens:update' postagem.id %}">Editar</a>
