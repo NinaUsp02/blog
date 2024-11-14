@@ -12,8 +12,7 @@ class Postagem(models.Model):
 
 
 class Review(models.Model):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL,
-                               on_delete=models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     text = models.CharField(max_length=255)
     likes = models.IntegerField(default=0)
     postagem = models.ForeignKey(Postagem, on_delete=models.CASCADE)

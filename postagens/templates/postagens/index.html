@@ -9,5 +9,18 @@
     <a href="{% url 'postagens:create' %}">Adicionar Novo Projeto</a>
   </p>
 </section>
+
 {% if postagem_list %}
-<section class="lista-de-cards">...</section>
+<section class="lista-de-cards">
+    {% for postagem in postagem_list %}
+    <article class="card">
+        <a href="{% url 'postagens:detail' postagem.id %}">
+            <img src="{{ postagem.poster_url }}" alt="Poster do filme {{ postagem.name }}" /> 
+        </a>
+        <p>{{ postagem.name }} ({{ postagem.release_year }})</p>
+    </article>
+    {% endfor %}
+</section>
+{% endif %}
+
+{% endblock content %}

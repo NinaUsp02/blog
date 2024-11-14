@@ -1,20 +1,19 @@
 from django.http import HttpResponse
 from .temp_data import postagem_data
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from .models import Postagem
 
-def detail_postagem(request, postagem_id):
-    postagem = postagem_data[postagem_id - 1]
-    return HttpResponse(
-        f'Detalhes do projeto {postagem["name"]} ({postagem["release_year"]})')
 
 def list_postagens(request):
-    context = {"postagem_list": postagem_data}
+    postagem_list = Postagem.objects.all()
+    context = {'postagem_list': postagem_list}
     return render(request, 'postagens/index.html', context)
 
 def detail_postagem(request, postagem_id):
-    context = {'postagem': postagem_data[postagem_id - 1]}
+    postagem = get_object_or_404(Postagem, pk=postagem_id)
+    context = {'postagem': postagem}
     return render(request, 'postagens/detail.html', context)
 
 def search_postagens(request):
@@ -40,3 +39,4 @@ def create_postagem(request):
             reverse('postagens:detail', args=(len(postagem_data), )))
     else:
         return render(request, 'postagens/create.html', {})
+    
