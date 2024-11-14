@@ -1,3 +1,5 @@
+from django.db.models.base import Model as Model
+from django.db.models.query import QuerySet
 from django.http import HttpResponse
 from .temp_data import postagem_data
 from django.shortcuts import render, get_object_or_404
@@ -12,72 +14,37 @@ class PostagemListView(generic.ListView):
     model = Postagem
     template_name = 'postagens/index.html'
 
-def detail_postagem(request, postagem_id):
-    postagem = get_object_or_404(Postagem, pk=postagem_id)
-    context = {'postagem': postagem}
-    return render(request, 'postagens/detail.html', context)
-
+class PostagemDetailView(generic.DetailView):
+    model = Postagem
+    template_name = 'postagens/detail.html'
+    context_object_name = 'postagem'
+    def get_object(self, queryset=None):
+        return get_object_or_404(Postagem, pk=self.kwargs.get('pk'))
+    
 def search_postagens(request):
     context = {}
-    if request.GET.get('query', False):
-        search_term = request.GET['query'].lower()
+    if request.GET.get("query", False):
+        search_term = request.GET["query"].lower()
         postagem_list = Postagem.objects.filter(name__icontains=search_term)
         context = {"postagem_list": postagem_list}
-    return render(request, 'postagens/search.html', context)
+    return render(request, "postagens/search.html", context)
 
-def create_postagem(request):
-    if request.method == 'POST':
-        form = PostagemForm(request.POST)
-        if form.is_valid():
-            postagem_name = form.cleaned_data['name']
-            postagem_release_year = form.cleaned_data['release_year']
-            postagem_poster_url = form.cleaned_data['poster_url']
-            postagem = Postagem(name=postagem_name,
-                          release_year=postagem_release_year,
-                          poster_url=postagem_poster_url)
-            postagem.save()
-            return HttpResponseRedirect(
-                reverse('postagens:detail', args=(postagem.id, )))
-    else:
-        form = PostagemForm()
-    context = {'form': form}
-    return render(request, 'postagens/create.html', context)
+class PostagemCreateView(generic.CreateView):
+    model = Postagem
+    form_class = PostagemForm
+    template_name = 'postagens/create.html'
+    success_url = reverse_lazy('postagens:index')
 
+class PostagemUpdateView(generic.UpdateView):
+    model = Postagem
+    form_class = PostagemForm
+    template_name = 'postagens/update.html'
+    success_url = reverse_lazy('postagens:index')
 
-def update_postagem(request, postagem_id):
-    postagem = get_object_or_404(Postagem, pk=postagem_id)
-
-    if request.method == "POST":
-        form = PostagemForm(request.POST)
-        if form.is_valid():
-            postagem.name = form.cleaned_data['name']
-            postagem.release_year = form.cleaned_data['release_year']
-            postagem.poster_url = form.cleaned_data['poster_url']
-            postagem.save()
-            return HttpResponseRedirect(
-                reverse('postagens:detail', args=(postagem.id, )))
-    else:
-        form = PostagemForm(
-            initial={
-                'name': postagem.name,
-                'release_year': postagem.release_year,
-                'poster_url': postagem.poster_url
-            })
-
-    context = {'postagem': postagem, 'form': form}
-    return render(request, 'postagem/update.html', context)
-
-
-def delete_postagem(request, postagem_id):
-    postagem = get_object_or_404(Postagem, pk=postagem_id)
-
-    if request.method == "POST":
-        postagem.delete()
-        return HttpResponseRedirect(reverse('Postagem:index'))
-
-    context = {'postagem': postagem}
-    return render(request, 'postagens/delete.html', context)
-
+class PostagemDeleteView(generic.DeleteView):
+    model = Postagem
+    template_name = 'postagens/delete.html'
+    success_url = reverse_lazy('postagens:index')
 
 def create_review(request, postagem_id):
     postagem = get_object_or_404(Postagem, pk=postagem_id)
