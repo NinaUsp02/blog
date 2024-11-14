@@ -19,24 +19,21 @@ def detail_postagem(request, postagem_id):
 def search_postagens(request):
     context = {}
     if request.GET.get('query', False):
-        context = {
-            "postagem_list": [
-                m for m in postagem_data
-                if request.GET['query'].lower() in m['name'].lower()
-            ]
-        }
-    return render(request, 'postagens/search.html', context) 
-
+        search_term = request.GET['query'].lower()
+        postagem_list = Postagem.objects.filter(name__icontains=search_term)
+        context = {"postagem_list": postagem_list}
+    return render(request, 'postagens/search.html', context)
 
 def create_postagem(request):
     if request.method == 'POST':
-        postagem_data.append({
-            'name': request.POST['name'],
-            'release_year': request.POST['release_year'],
-            'poster_url': request.POST['poster_url']
-        })
+        postagem_name = request.POST['name']
+        postagem_release_year = request.POST['release_year']
+        postagem_poster_url = request.POST['poster_url']
+        postagem = Postagem(name=postagem_name,
+                      release_year=postagem_release_year,
+                      poster_url=postagem_poster_url)
+        postagem.save()
         return HttpResponseRedirect(
-            reverse('postagens:detail', args=(len(postagem_data), )))
+            reverse('postagens:detail', args=(postagem.id, )))
     else:
         return render(request, 'postagens/create.html', {})
-    
