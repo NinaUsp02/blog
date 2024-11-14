@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 
 
 class Postagem(models.Model):
@@ -11,12 +12,13 @@ class Postagem(models.Model):
         return f'{self.name} ({self.release_year})'
 
 
-class Review(models.Model):
+class Comment(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     text = models.CharField(max_length=255)
-    likes = models.IntegerField(default=0)
     postagem = models.ForeignKey(Postagem, on_delete=models.CASCADE)
-
+    data_postagem = models.DateTimeField(default=timezone.now)
+    class Meta:
+        ordering = ['-data_postagem']
     def __str__(self):
         return f'"{self.text}" - {self.author.username}'
     
