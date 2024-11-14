@@ -37,3 +37,29 @@ def create_postagem(request):
             reverse('postagens:detail', args=(postagem.id, )))
     else:
         return render(request, 'postagens/create.html', {})
+
+
+def update_postagem(request, postagem_id):
+    postagem = get_object_or_404(Postagem, pk=postagem_id)
+
+    if request.method == "POST":
+        postagem.name = request.POST['name']
+        postagem.release_year = request.POST['release_year']
+        postagem.poster_url = request.POST['poster_url']
+        postagem.save()
+        return HttpResponseRedirect(
+            reverse('postagens:detail', args=(postagem.id, )))
+
+    context = {'postagem': postagem}
+    return render(request, 'postagens/update.html', context)
+
+
+def delete_postagem(request, postagem_id):
+    postagem = get_object_or_404(Postagem, pk=postagem_id)
+
+    if request.method == "POST":
+        postagem.delete()
+        return HttpResponseRedirect(reverse('Postagem:index'))
+
+    context = {'postagem': postagem}
+    return render(request, 'postagens/delete.html', context)
