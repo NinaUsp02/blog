@@ -6,7 +6,13 @@
       <img src="{{ postagem.poster_url }}" alt="Poster do projeto {{ postagem.name}}" />
       <ul>
         <li>Nome: {{ postagem.name }}</li>
-        <li>Ano de Lançamento: {{ postagem.release_year }}</li>
+        <li>Ano de Atuação: {{ postagem.release_year }}</li>
+        <li>
+          <a href="{% url 'postagens:update' postagem.id %}">Editar</a>
+        </li>
+        <li>
+          <a href="{% url 'postagens:delete' postagem.id %}">Apagar</a>
+        </li>
       </ul>
     </section>
     
