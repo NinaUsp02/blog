@@ -4,14 +4,54 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .models import Postagem
+from django.views import generic
 
 
-def list_postagens(request):
-    postagem_list = Postagem.objects.all()
-    context = {'postagem_list': postagem_list}
-    return render(request, 'postagens/index.html', context)
+class PostagemListView(generic.ListView):
+    model = Postagem
+    template_name = 'postagens/index.html'
 
-def detail_postagem(request, postagem_id):
+class PostagemDetailView(generic.DetailView):
+    model = Postagem
+    template_name = 'postagens/detail.html'
+    context_object_name = 'postagem'
+
+class PostagemSearchView(generic.ListView):
+    model = Postagem
+    template_name = 'postagens/search.html'
+    context_object_name = 'postagem_list'
+
+    def get_queryset(self):
+        query = self.request.GET.get('query', '').lower()
+        if query:
+            return Postagem.objects.filter(name__icontains=query)
+        return Postagem.objects.none()
+
+class PostagemCreateView(generic.CreateView):
+    model = Postagem
+    template_name = 'postagens/create.html'
+    fields = ['name', 'release_year', 'poster_url']
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        success_url = reverse('postagens:detail', kwargs={'pk': self.object.pk})
+        return HttpResponseRedirect(success_url)
+    
+class PostagemUpdateView(generic.UpdateView):
+    model = Postagem
+    template_name = 'postagens/update.html'
+    fields = ['name', 'release_year', 'poster_url']
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        success_url = reverse('postagens:detail', kwargs={'pk': self.object.pk})
+        return HttpResponseRedirect(success_url)
+
+class PostagemDeleteView(generic.DeleteView):
+    model = Postagem
+    template_name = 'postagens/delete.html'
+    def get_success_url(self):
+        return reverse('postagens:index')
+
+""" def detail_postagem(request, postagem_id):
     postagem = get_object_or_404(Postagem, pk=postagem_id)
     context = {'postagem': postagem}
     return render(request, 'postagens/detail.html', context)
@@ -62,4 +102,4 @@ def delete_postagem(request, postagem_id):
         return HttpResponseRedirect(reverse('Postagem:index'))
 
     context = {'postagem': postagem}
-    return render(request, 'postagens/delete.html', context)
+    return render(request, 'postagens/delete.html', context) """
