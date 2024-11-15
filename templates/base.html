@@ -1,50 +1,50 @@
 {% load static %} 
-
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            {% block title %}{% endblock %} | Veja esse Projeto!
+        </title>
+        <link href="https://fonts.googleapis.com/css?family=Inter&display=swap" rel="stylesheet" /> <!-- adicione esta linha -->
+        <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}"> <!-- adicione esta linha -->
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        {% block title %}{% endblock %} | Watch that film!
-    </title>
-    <link href="https://fonts.googleapis.com/css?family=Inter&display=swap" rel="stylesheet" /> <!-- adicione esta linha -->
-    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}"> <!-- adicione esta linha -->
-</head>
+    <body>
+        <header id="cabecalho-principal">
+            <a href="{% url 'index' %}">
+                <img src="https://i.imgur.com/8jteobv.jpeg" alt="imagemperfil" class="logo">
+            </a>
+            <nav id="navegacao-principal">
+                <ul>
+                    {% if user.is_authenticated %}
+                        <li> Logado com {{ user.username }} </li>
+                        <li>
+                            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                            <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+                                {% csrf_token %}
+                            </form>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Log in</a></li>
+                    {% endif %}  
+                    <li><a href="{% url 'postagens:index' %}">Projetos</a></li>
+                    <li><a href="{% url 'postagens:lists' %}">Listas</a></li>
+                    <li><a href="{% url 'about' %}">Sobre</a></li>
+                </ul>
+            </nav>
 
-<body>
-    <header id="cabecalho-principal">
-        <img src="https://i.imgur.com/8jteobv.jpeg" alt="imagemperfil" class="logo">
-        <nav id="navegacao-principal">
-            <ul>
-                {% if user.is_authenticated %}
-                    <li> Logado com {{ user.username }} </li>
-                    <li>
-                        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                        <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
-                            {% csrf_token %}
-                        </form>
-                {% else %}
-                    <li><a href="{% url 'login' %}">Log in</a></li>
-                {% endif %}  
-                <li><a href="{% url 'postagens:index' %}">Projetos</a></li>
-                <li><a href="{% url 'postagens:lists' %}">Listas</a></li>
-                <li><a href="{% url 'about' %}">Sobre</a></li>
-            </ul>
-        </nav>
+        </header>
+        <main id="conteiner-principal">
+            {% block content %}
+            {% endblock content %}
+        </main>
+        <footer id="rodape-principal">
+            <p>
+                <small>Copyright 2021</small>
+            </p>
+        </footer>
+    </body>
 
-    </header>
-    <main id="conteiner-principal">
-        {% block content %}
-        {% endblock content %}
-    </main>
-    <footer id="rodape-principal">
-        <p>
-            <small>Copyright 2021</small>
-        </p>
-    </footer>
-</body>
-
-</html>
+    </html>
