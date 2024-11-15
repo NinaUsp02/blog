@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Categoria 
+{% endblock title %}
+
+{% block content %}
+
+<h2>Categoria: {{category.name}}</h2>
+<section>
+    <hr>
+    <article>
+        <header>
+            <h3>Projetos desta categoria</h3>
+        </header>
+        <div class="lista-de-cards">
+            {% for postagem in postagens %}
+            <div class="card">
+                <li>{{ postagem.name }} ({{ postagem.release_year }})</li>
+            </div>
+            {% empty %}
+                <p>Não há projetos desta categoria</p>
+            {% endfor %}
+        </div>
+    </article>
+</section>
