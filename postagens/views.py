@@ -5,7 +5,7 @@ from .temp_data import postagem_data
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
-from .models import Postagem, List, Comment
+from .models import Postagem, List, Comment, Category
 from django.views import generic
 from .forms import PostagemForm, CommentForm
 from django.contrib.auth.decorators import login_required
@@ -79,3 +79,18 @@ class ListCreateView(generic.CreateView):
     template_name = 'postagens/create_list.html'
     fields = ['name', 'author', 'postagens']
     success_url = reverse_lazy('postagens:lists')
+
+
+def list_categories(request):
+    category_list = Category.objects.all()
+    context = {'category_list':category_list}
+    return render(request, "postagens/list.html", context)
+
+def individual_category(request, category_id):
+    category = get_object_or_404(Category, pk=category_id)
+    postagens = category.postagens.all()
+    context = {'category': category, 'postagens': postagens}
+    return render(request, 'postagens/individual.html', context)
+
+
+
