@@ -90,7 +90,7 @@ def individual_category(request, category_id):
     category = get_object_or_404(Category, pk=category_id)
     postagens = category.postagens.all()
     context = {'category': category, 'postagens': postagens}
-    return render(request, 'postagens/individual.html', context)
+    return render(request, 'postagens/individual_category.html', context)
 
 
 

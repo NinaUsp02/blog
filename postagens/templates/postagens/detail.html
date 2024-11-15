@@ -14,6 +14,13 @@
             {% endfor %} 
           </li>
         {% endif %}
+        {% if postagem.category_set.exists %}
+          <li>Categorias:
+            {% for category in postagem.category_set.all %}
+              <a href="{% url 'individual_category' category.id %}">{{ category.name }}</a>{% if not forloop.last %}, {% endif %} 
+            {% endfor %}  
+          </li>
+        {% endif %}
         <li>
           <a href="{% url 'postagens:update' postagem.id %}">Editar</a>
         </li>
