@@ -13,5 +13,7 @@ urlpatterns = [
     path('lists/', views.ListListView.as_view(), name='lists'),
     path('lists/create', views.ListCreateView.as_view(), name='create-list'),
     path('<int:postagem_id>/comment/', views.create_comment, name='comment'),
+    path('categories/', views.list_categories, name='list_categories'),
+    path('categories/<int:category_id>/', views.individual_category, name='individual_category'),
  ]
 
