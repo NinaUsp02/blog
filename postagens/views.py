@@ -72,7 +72,7 @@ def create_comment(request, postagem_id):
 def list_categories(request):
     category_list = Category.objects.all()
     context = {'category_list':category_list}
-    return render(request, "postagens/list.html", context)
+    return render(request, "postagens/list_categories.html", context)
 
 def individual_category(request, category_id):
     category = get_object_or_404(Category, pk=category_id)
