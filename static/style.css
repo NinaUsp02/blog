@@ -113,7 +113,7 @@
     text-decoration: underline;
   }
   
-  .dados-de-filme {
+  .dados-de-projeto {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
@@ -121,12 +121,12 @@
     padding: 1rem 0;
   }
   
-  .dados-de-filme img {
+  .dados-de-projeto img {
     width: 285px;
     box-shadow: 2px 2px 10px var(--color-shadow);
   }
   
-  .dados-de-filme ul {
+  .dados-de-projeto ul {
     list-style-type: none;
   }
   
